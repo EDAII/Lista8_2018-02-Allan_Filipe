@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Programação Dinâmica</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <!-- My CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'Trabalho08/style.css' %}">
+</head>
+
+<body class="background background-home">
+
+    <form id="form" class="container" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row" style="margin: 20px">
+            <h3 class="col-12 text-center" style="color:white">Escolha quais algorítmos de "Programação Dinâmica"
+                deseja executar</h3>
+
+            <div class="col-2"></div>
+            <p class="col-8 text-center" style="color:white">OBS.: Você pode executar cada algorítmo individualmente.</p>
+            <div class="col-2"></div>
+
+            <div class="col-4"></div>
+            <div class="col-4">
+                <select class="form-control" required id="inputGroupSelect" name="selectedOption">
+                    <option>Knapsack Iterativo</option>
+                    <option>Maior Subsequência Crescente</option>
+                </select>
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+        <div class="row">
+            <h3 class="col-12 text-center" style="color:white">Escolha sua base de Registros em formato ".csv"</h3>
+            <div class="col-4"></div>
+            <div class="col-4">
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" required class="custom-file-input" id="inputGroupFile02" name="myfile"
+                            accept=".csv">
+                        <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+        <div class="row" style="margin-top: 15px; margin-bottom: 40px">
+            <div class="input-group-append column-in-center">
+                <div id="loader" class="loader-home" hidden="true"></div>
+                <button id="uploadButton" class="input-group-text" type="submit">Upload</button>
+            </div>
+        </div>
+
+        <div class="container" style="margin-top: 10px">
+            <h3 class="col-12 text-center" style="color:white">Formato dos ".csv's" para cada algoritmo</h3>
+            <div class="row py-3">
+
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-img-top text-center">
+                            <img src="{% static 'images/Exemplo-Knap.png' %}" style="height: 250px" alt="Card image cap">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Knapsack Iterativo</h5>
+                            <p class="card-text">O ".csv" deve conter 3 colunas, a primeira com o valor, a
+                                segunda com o peso e a terceira com o peso máximo da mochila. A primeira
+                                linha deve conter os nomes das colunas e somente a terceira posição da segunda linha
+                                deve
+                                conter o peso limite da mochila, o restante das linhas pra essa coluna devem estar
+                                zeradas.
+                                Como pode-se observar na figura de exemplo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-img-top text-center">
+                            <img src="{% static 'images/Exemplo-SubSeq.png' %}" style="height: 250px" alt="Card image cap">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Maior Subsequência Crescente</h5>
+                            <p class="card-text">O ".csv" não tem restrições de números de linhas ou colunas. Deve-se
+                                somente respeitar a primeira linha como o título das colunas e a primeira coluna como
+                                um ID inteiro positivo.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </form>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script>
+        $("#form").submit(function (e) {
+            document.getElementById("uploadButton").hidden = true;
+            document.getElementById("loader").hidden = false;
+        });
+    </script>
+
+</body>
+
+</html>
