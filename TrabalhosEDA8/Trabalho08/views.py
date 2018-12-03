@@ -11,7 +11,9 @@ def home(request):
         text_obj = byte_str.decode('UTF-8')
 
         # Choosing algorithm options
-        if request.POST['selectedOption'] == "Knapsack Iterativo":
+        if request.POST['selectedOption'] == "Gerar Métricas":
+            pass
+        elif request.POST['selectedOption'] == "Knapsack Iterativo":
             columns_descriptions, values, weights, limit = read_csv_knapsack(text_obj.splitlines())
 
             item_weight_table = create_item_weight_table(values, weights)

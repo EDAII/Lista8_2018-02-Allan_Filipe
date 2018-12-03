@@ -17,7 +17,7 @@
     <form id="form" class="container" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <div class="row" style="margin: 20px">
+        <div hidden="true" class="row" style="margin: 20px">
             <h3 class="col-12 text-center" style="color:white">Escolha quais algorítmos de "Programação Dinâmica"
                 deseja executar</h3>
 
@@ -28,8 +28,8 @@
             <div class="col-4"></div>
             <div class="col-4">
                 <select class="form-control" required id="inputGroupSelect" name="selectedOption">
-                    <option>Knapsack Iterativo</option>
-                    <option>Maior Subsequência Crescente</option>
+                    <option>Gerar Métricas</option>
+                    <option>Gerar Métricas</option>
                 </select>
             </div>
             <div class="col-4"></div>
@@ -58,25 +58,10 @@
         </div>
 
         <div class="container" style="margin-top: 10px">
-            <h3 class="col-12 text-center" style="color:white">Formato dos ".csv's" para cada algoritmo</h3>
+            <h3 class="col-12 text-center" style="color:white">Formato do ".csv" para simular a análise do código em Java</h3>
             <div class="row py-3">
 
-                <div class="col-6">
-                    <div class="card">
-                        <div class="card-img-top text-center">
-                            <img src="{% static 'images/Exemplo-Knap.png' %}" style="height: 250px" alt="Card image cap">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Knapsack Iterativo</h5>
-                            <p class="card-text">O ".csv" deve conter 3 colunas, a primeira com o valor, a
-                                segunda com o peso e a terceira com o peso máximo da mochila. A primeira
-                                linha deve conter os nomes das colunas e somente a terceira posição da segunda linha
-                                deve
-                                conter o peso limite da mochila, o restante das linhas pra essa coluna devem estar
-                                zeradas.
-                                Como pode-se observar na figura de exemplo.</p>
-                        </div>
-                    </div>
+                <div class="col-3">
                 </div>
 
                 <div class="col-6">
@@ -91,8 +76,11 @@
                                 um ID inteiro positivo.</p>
                         </div>
                     </div>
-
                 </div>
+
+                <div class="col-3">
+                </div>
+
             </div>
     </form>
 
