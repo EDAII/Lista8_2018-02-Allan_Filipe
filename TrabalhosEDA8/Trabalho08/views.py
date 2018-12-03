@@ -15,56 +15,36 @@ def home(request):
         if request.POST['selectedOption'] == "Gerar Métricas":
             columns_descriptions, all_data = read_csv(text_obj.splitlines())
 
+            time_initial_create = time.time()
             classes_graph = create_graph(all_data)
-            print("classes_graph.nodes")
-            print(classes_graph.nodes)
+            time_final_create = time.time() - time_initial_create
 
-            print("classes_graph.out_degree")
-            print(classes_graph.out_degree)
-            print("classes_graph.in_degree")
-            print(classes_graph.in_degree)
-        elif request.POST['selectedOption'] == "Knapsack Iterativo":
-            columns_descriptions, values, weights, limit = read_csv_knapsack(text_obj.splitlines())
+            time_initial_nodes = time.time()
+            classes_nodes = classes_graph.nodes
+            time_final_nodes = time.time() - time_initial_nodes
 
-            item_weight_table = create_item_weight_table(values, weights)
+            time_initial_edges = time.time()
+            classes_nodes = classes_graph.nodes
+            time_final_edges = time.time() - time_initial_edges
 
-            weights_list = create_weight_list(limit)
+            time_initial_degrees = time.time()
+            nodes_degrees_table = create_nodes_degree_table(classes_graph)
+            time_final_degrees = time.time() - time_initial_degrees
 
-            time_initial = time.time()
-            result, table = knapSack(limit, weights, values, len(values))
-            time_final = time.time() - time_initial
-
-            items = getItems(table, limit, len(values), weights, values)
-
-            table = put_itens_on_table(table)
+            max_in_degree = max(classes_graph.in_degree, key=getKey)
+            max_out_degree = max(classes_graph.out_degree, key=getKey)
+            max_degree = max(classes_graph.degree, key=getKey)
 
             return render(request, 'result.html', {'algorithm': request.POST['selectedOption'],
-                                                   'weights_list': weights_list,
-                                                   'limit': limit,
-                                                   'result': result,
-                                                   'table': table,
-                                                   'items': items,
-                                                   'time_final': time_final,
-                                                   'item_weight_table': item_weight_table})
-
-        elif request.POST['selectedOption'] == "Maior Subsequência Crescente":
-            columns_descriptions, all_data = read_csv(text_obj.splitlines())
-
-            time_initial = time.time()
-            longest_value, resolution_list = longest_increasing_subsequence(all_data)
-            time_final = time.time() - time_initial
-
-            dataset_with_list, id_list = put_resolution_list_on_dataset(all_data, resolution_list)
-
-            return render(request, 'result.html', {'algorithm': request.POST['selectedOption'],
-                                                   'columns_descriptions': columns_descriptions,
-                                                   'longest_value': longest_value,
-                                                   'time_final': time_final,
-                                                   'id_list': id_list,
-                                                   'resolution_list': resolution_list,
-                                                   'dataset_with_list': dataset_with_list,
-                                                   'all_data': all_data})
-
+                                                   'time_final_create': time_final_create,
+                                                   'time_final_nodes': time_final_nodes,
+                                                   'time_final_edges': time_final_edges,
+                                                   'time_final_degrees': time_final_degrees,
+                                                   'nodes_degrees_table': nodes_degrees_table,
+                                                   'max_in_degree': max_in_degree,
+                                                   'max_out_degree': max_out_degree,
+                                                   'max_degree': max_degree,
+                                                   'classes_nodes': classes_nodes})
         else:
             # Nothing to do
             pass
@@ -74,6 +54,19 @@ def home(request):
         pass
 
     return render(request, 'home.html')
+
+
+def getKey(item):
+    return item[1]
+
+
+def create_nodes_degree_table(classes_graph):
+    nodes_degrees_table = []
+
+    for (in_degree, out_degree, degree) in zip(classes_graph.in_degree, classes_graph.out_degree, classes_graph.degree):
+        nodes_degrees_table.append([in_degree[0], in_degree[1], out_degree[1], degree[1]])
+
+    return nodes_degrees_table
 
 
 def create_graph(dataset):
@@ -104,115 +97,3 @@ def read_csv(file):
             all_data.append(line_splitted)
 
     return columns_descriptions, all_data
-
-
-def put_itens_on_table(table):
-    new_table = list(table)
-    current_string = "{} {}"
-
-    for i in range(0, len(table)):
-        new_table[i].insert(0, current_string.format("{", "}"))
-        if i == 0:
-            current_string = "{}" + current_string.format("", "") + str(i + 1) + " " + "{}"
-        else:
-            current_string = "{}" + current_string.format("", "") + "; " + str(i + 1) + " " + "{}"
-
-    return new_table
-
-
-def create_weight_list(limit):
-    weights_list = []
-
-    for weight in range(0, limit + 1):
-        weights_list.append(weight)
-
-    return weights_list
-
-
-def create_item_weight_table(values, weights):
-    values_quantit = len(values)
-
-    data = []
-    for number in range(0, values_quantit):
-        data.append([number + 1, values[number], weights[number]])
-
-    return data
-
-
-def read_csv_knapsack(file):
-    values = []
-    weights = []
-    limit = []
-    columns_descriptions = []
-
-    # Save all csv data in a list of lists, removing '\n' at the last line element.
-    for line in file:
-        if not columns_descriptions:
-            columns_descriptions = line.split(",")
-            columns_descriptions[-1] = columns_descriptions[-1].strip("\n")
-        else:
-            data = line.split(",")
-            values.append(int(data[0]))
-            weights.append(int(data[1]))
-            limit.append(int(data[2]))
-
-    return columns_descriptions, values, weights, limit[0]
-
-
-def getItems(values_table, weight_limit, values_quantit, weights, values):
-    result = values_table[values_quantit][weight_limit]
-    items = []
-
-    for number in range(values_quantit, 0, -1):
-        if result <= 0:
-            break
-        if result == values_table[number - 1][weight_limit]:
-            continue
-        else:
-            items.append(weights[number - 1])
-
-            result = result - values[number - 1]
-            weight_limit = weight_limit - weights[number - 1]
-
-    return items
-
-
-def knapSack(weight_limit, weights, values, values_quantit):
-    values_table = [[0 for x in range(weight_limit + 1)] for x in range(values_quantit + 1)]
-
-    for item in range(values_quantit + 1):
-        for weight in range(weight_limit + 1):
-            if item == 0 or weight == 0:
-                values_table[item][weight] = 0
-            elif weights[item - 1] <= weight:
-                values_table[item][weight] = max(values[item - 1] + values_table[item - 1][weight - weights[item - 1]], values_table[item - 1][weight])
-            else:
-                values_table[item][weight] = values_table[item - 1][weight]
-
-    return values_table[values_quantit][weight_limit], values_table
-
-
-def longest_increasing_subsequence(receive_data):
-    dataset = list(receive_data)
-    resolution_list = [1 for _ in range(len(dataset))]
-
-    for i in range(len(dataset)):
-        for j in range(i):
-            if int(dataset[j][0]) <= int(dataset[i][0]):
-                resolution_list[i] = max(resolution_list[i], resolution_list[j] + 1)
-
-    return max(resolution_list), resolution_list
-
-
-def put_resolution_list_on_dataset(dataset, resolution_list):
-    new_dataset = [[], []]
-    id_list = []
-
-    for i in range(0, len(dataset)):
-        id_list.append(dataset[i][0])
-        new_dataset[0].append(dataset[i][0])
-
-    for i in range(0, len(resolution_list)):
-        new_dataset[1].append(resolution_list[i])
-
-    return new_dataset, id_list
