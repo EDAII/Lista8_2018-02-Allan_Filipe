@@ -22,10 +22,10 @@
 
         <h1 class="col-12" style="margin-top: 20px; color:white">Relações Entre Classes - Grafo</h1>
         <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Tempo de Criação do Grafo: <b>{{ time_final_create }}</b></h4>
-        <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Tempo para acessar os Nós: <b>{{ time_final_nodes }}</b></h4>
-        <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Tempo para acessar as Arestas: <b>{{ time_final_edges }}</b></h4>
 
         <h2 class="col-12" style="margin-bottom: 00px; margin-top: 50px; color:white">Nós do Grafo (Classes)</h2>
+        <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Quantidade Total de Nós: <b>{{ nodes_number|length }}</b></h4>
+        <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Tempo para acessar os Nós: <b>{{ time_final_nodes }}</b></h4>
 
         <center>
             <div id="loaderNos" class="loader"></div>
@@ -52,6 +52,8 @@
         </div>
 
         <h2 class="col-12" style="margin-bottom: 00px; margin-top: 50px; color:white">Arestas do Grafo (Conexões)</h2>
+        <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Quantidade Total de Arestas: <b>{{ edges_number|length }}</b></h4>
+        <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Tempo para acessar as Arestas: <b>{{ time_final_edges }}</b></h4>
 
         <center>
             <div id="loaderEdge" class="loader"></div>
@@ -83,6 +85,7 @@
         </div>
 
         <h2 class="col-12" style="margin-bottom: 00px; margin-top: 50px; color:white">Tabela de Graus dos Nós (Classes)</h2>
+        <h4 class="col-12" style="margin-top: 10px; margin-bottom: 10px; color:white">Tempo para acessar os Graus: <b>{{ time_final_degrees }}</b></h4>
 
         <center>
             <div id="loaderDegree" class="loader"></div>
