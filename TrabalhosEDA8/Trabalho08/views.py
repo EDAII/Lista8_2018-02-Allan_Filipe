@@ -23,9 +23,21 @@ def home(request):
             classes_nodes = classes_graph.nodes
             time_final_nodes = time.time() - time_initial_nodes
 
+            nodes_number = []
+            for i in range(1, len(classes_nodes) + 1):
+                nodes_number.append(i)
+
             time_initial_edges = time.time()
-            classes_nodes = classes_graph.nodes
+            classes_edges_tuple = classes_graph.edges
             time_final_edges = time.time() - time_initial_edges
+
+            edges_number = []
+            classes_edges = []
+            i = 0
+            for edge in classes_edges_tuple:
+                i = i + 1
+                edges_number.append(i)
+                classes_edges.append(list(edge))
 
             time_initial_degrees = time.time()
             nodes_degrees_table = create_nodes_degree_table(classes_graph)
@@ -34,6 +46,10 @@ def home(request):
             max_in_degree = max(classes_graph.in_degree, key=getKey)
             max_out_degree = max(classes_graph.out_degree, key=getKey)
             max_degree = max(classes_graph.degree, key=getKey)
+
+            min_in_degree = min(classes_graph.in_degree, key=getKey)
+            min_out_degree = min(classes_graph.out_degree, key=getKey)
+            min_degree = min(classes_graph.degree, key=getKey)
 
             return render(request, 'result.html', {'algorithm': request.POST['selectedOption'],
                                                    'time_final_create': time_final_create,
@@ -44,6 +60,12 @@ def home(request):
                                                    'max_in_degree': max_in_degree,
                                                    'max_out_degree': max_out_degree,
                                                    'max_degree': max_degree,
+                                                   'min_in_degree': min_in_degree,
+                                                   'min_out_degree': min_out_degree,
+                                                   'min_degree': min_degree,
+                                                   'classes_edges': classes_edges,
+                                                   'nodes_number': nodes_number,
+                                                   'edges_number': edges_number,
                                                    'classes_nodes': classes_nodes})
         else:
             # Nothing to do
