@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import time
+import networkx as nx
 
 
 def home(request):
@@ -12,7 +13,16 @@ def home(request):
 
         # Choosing algorithm options
         if request.POST['selectedOption'] == "Gerar Métricas":
-            pass
+            columns_descriptions, all_data = read_csv(text_obj.splitlines())
+
+            classes_graph = create_graph(all_data)
+            print("classes_graph.nodes")
+            print(classes_graph.nodes)
+
+            print("classes_graph.out_degree")
+            print(classes_graph.out_degree)
+            print("classes_graph.in_degree")
+            print(classes_graph.in_degree)
         elif request.POST['selectedOption'] == "Knapsack Iterativo":
             columns_descriptions, values, weights, limit = read_csv_knapsack(text_obj.splitlines())
 
@@ -64,6 +74,36 @@ def home(request):
         pass
 
     return render(request, 'home.html')
+
+
+def create_graph(dataset):
+    classes_graph = nx.DiGraph()
+
+    for line in dataset:
+        if len(line) == 1:
+            classes_graph.add_node(line[0])
+        else:
+            for i in range(1, len(line)):
+                classes_graph.add_edge(line[0], line[i])
+
+    return classes_graph
+
+
+def read_csv(file):
+    all_data = []
+    columns_descriptions = []
+
+    # Save all csv data in a list of lists, removing '\n' at the last line element.
+    for line in file:
+        if not columns_descriptions:
+            columns_descriptions = line.split(",")
+            columns_descriptions[-1] = columns_descriptions[-1].strip("\n")
+        else:
+            line_splitted = line.split(",")
+            line_splitted[-1] = line_splitted[-1].strip("\n")
+            all_data.append(line_splitted)
+
+    return columns_descriptions, all_data
 
 
 def put_itens_on_table(table):
@@ -150,23 +190,6 @@ def knapSack(weight_limit, weights, values, values_quantit):
                 values_table[item][weight] = values_table[item - 1][weight]
 
     return values_table[values_quantit][weight_limit], values_table
-
-
-def read_csv(file):
-    all_data = []
-    columns_descriptions = []
-
-    # Save all csv data in a list of lists, removing '\n' at the last line element.
-    for line in file:
-        if not columns_descriptions:
-            columns_descriptions = line.split(",")
-            columns_descriptions[-1] = columns_descriptions[-1].strip("\n")
-        else:
-            line_splitted = line.split(",")
-            line_splitted[-1] = line_splitted[-1].strip("\n")
-            all_data.append(line_splitted)
-
-    return columns_descriptions, all_data
 
 
 def longest_increasing_subsequence(receive_data):
