@@ -1,6 +1,8 @@
 from django.shortcuts import render
 import time
 import networkx as nx
+import matplotlib
+matplotlib.use('Agg')
 
 
 def home(request):
@@ -50,6 +52,9 @@ def home(request):
             min_in_degree = min(classes_graph.in_degree, key=getKey)
             min_out_degree = min(classes_graph.out_degree, key=getKey)
             min_degree = min(classes_graph.degree, key=getKey)
+
+            nx.draw_circular(classes_graph, with_labels=True)
+            matplotlib.pyplot.savefig("Trabalho08/static/images/image.png")
 
             return render(request, 'result.html', {'algorithm': request.POST['selectedOption'],
                                                    'time_final_create': time_final_create,
